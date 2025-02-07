@@ -5,9 +5,14 @@ import { Button } from "@/components/ui/button";
 import { FileText, Terminal, Calculator, Image, Settings } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-
 interface StartMenuProps {
   onClose: () => void;
+}
+
+interface AppIcon {
+  id: string;
+  title: string;
+  icon: React.ComponentType<any>;
 }
 
 export default function StartMenu({ onClose }: StartMenuProps) {
@@ -21,15 +26,13 @@ export default function StartMenu({ onClose }: StartMenuProps) {
       }
     };
 
-    // Small delay to prevent immediate closure
-    setTimeout(() => {
-      window.addEventListener('click', handleClickOutside);
-    }, 0);
+    // Add a click listener to close the menu when clicking outside
+    window.addEventListener("click", handleClickOutside);
 
-    return () => window.removeEventListener('click', handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   }, [onClose]);
 
-  const handleAppClick = (app) => {
+  const handleAppClick = (app: AppIcon) => {
     openWindow({
       id: app.id,
       title: app.title,
@@ -42,7 +45,7 @@ export default function StartMenu({ onClose }: StartMenuProps) {
     onClose();
   };
 
-  const apps = [
+  const apps: AppIcon[] = [
     { id: "notepad", title: "Notepad", icon: FileText },
     { id: "terminal", title: "Terminal", icon: Terminal },
     { id: "calculator", title: "Calculator", icon: Calculator },
