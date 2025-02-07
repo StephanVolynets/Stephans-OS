@@ -1,16 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Calendar from "react-calendar";
+import Calendar, { CalendarProps } from "react-calendar";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-calendar/dist/Calendar.css";
+
+type CalendarValue = CalendarProps["value"];
 
 export function TaskbarClock() {
   const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<CalendarValue>(new Date());
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,6 +39,10 @@ export function TaskbarClock() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleDateChange: CalendarProps["onChange"] = (value) => {
+    setSelectedDate(value);
+  };
+
   return (
     <div ref={containerRef} className="relative">
       <button
@@ -59,14 +65,14 @@ export function TaskbarClock() {
             <div className="bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-lg p-4 min-w-[300px]">
               <div className="mb-4">
                 <h2 className="text-lg font-semibold">
-                  {format(selectedDate, "MMMM d, yyyy")}
+                  {format(selectedDate as Date, "MMMM d, yyyy")}
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  {format(selectedDate, "EEEE")}
+                  {format(selectedDate as Date, "EEEE")}
                 </p>
               </div>
               <Calendar
-                onChange={setSelectedDate}
+                onChange={handleDateChange}
                 value={selectedDate}
                 className="react-calendar--dark"
               />
