@@ -26,10 +26,15 @@ export default function StartMenu({ onClose }: StartMenuProps) {
       }
     };
 
-    // Add a click listener to close the menu when clicking outside
-    window.addEventListener("click", handleClickOutside);
+    // Add a small delay to prevent immediate closure when clicking inside the menu
+    const timer = setTimeout(() => {
+      window.addEventListener("click", handleClickOutside);
+    }, 100);
 
-    return () => window.removeEventListener("click", handleClickOutside);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("click", handleClickOutside);
+    };
   }, [onClose]);
 
   const handleAppClick = (app: AppIcon) => {
