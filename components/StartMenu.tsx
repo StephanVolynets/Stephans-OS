@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { FileText, Terminal, Calculator, Image, Settings } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-export default function StartMenu({ onClose }) {
+
+interface StartMenuProps {
+  onClose: () => void;
+}
+
+export default function StartMenu({ onClose }: StartMenuProps) {
   const { openWindow } = useWindows();
   const menuRef = useRef<HTMLDivElement>(null);
 
