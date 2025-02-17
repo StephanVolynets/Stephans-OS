@@ -12,24 +12,25 @@
 
 </p>
 
- <p align="center">
-    <img src="https://github.com/user-attachments/assets/581b8f41-2b95-4c60-bcca-da9b1f6fb39d" alt="Desktop Browser"  width="300" >
-     
- </p>
-
-
+ 
    
 
 ## Technologies Used
 
-  **TypeScript**: Strongly typed, good for scalable and maintainable code.
-  **React/Next.js**: For dynamic rendering and routing.
-  **CSS (with custom animations)**: Used to style and create animations for the desktop environment.
-  **Framer Motion**: For fluid animations and transitions.
-  **TINYmce**: A WYSIWYG text editor for file editing.
-  **React Calendar**: Calendar interface with event management capabilities.
-  **IndexedDB (Planned)**: Persistent client side storage for the file system.
-  **ZenFS (Exploring)**: Considering integration with ZenFS for a more robust file system emulation.
+ ° **TypeScript**: Strongly typed, good for scalable and maintainable code.
+ 
+ ° **React/Next.js**: For dynamic rendering and routing.
+ 
+ ° **CSS custom animations**: Used to style and create animations for the desktop environment.
+  
+ ° **Framer Motion**: For fluid animations and transitions.
+ 
+ ° **TINYmce**: A WYSIWYG text editor for file editing.
+ 
+ ° **React Calendar**: Calendar interface with event management capabilities.
+  
+ ° **IndexedDB (Planned)**: Persistent client side storage for the file system.
+  
 
    
 
