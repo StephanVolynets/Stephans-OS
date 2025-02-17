@@ -16,7 +16,8 @@ export function AboutMeContent() {
         <li>Responsive Web Design</li>
         <li>Performance Optimization</li>
       </ul>
-      <h2>Projects</h2>
+      <br>
+      </br>
       <p>
         This desktop environment is one of my projects, demonstrating modern web 
         technologies and interactive user interfaces. Feel free to explore the 

@@ -67,22 +67,22 @@ export function ContextMenu({
   const [submenuPosition, setSubmenuPosition] = useState<MenuPosition | null>(null);
 
   // Define menu items based on context type
-  const getMenuItems = (): MenuItem[] => {
+  const getMenuItems = (): (MenuItem | { divider: true })[] => {
     switch (type) {
       case 'file':
         return [
           { icon: FileText, label: 'Open', action: onOpen },
-          { divider: true },
+          { divider: true, label: '' },
           { icon: Pencil, label: 'Rename', action: onRename },
           { icon: Copy, label: 'Duplicate', action: onDuplicate },
           { icon: Trash2, label: 'Delete', action: onDelete },
-          { divider: true },
+          { divider: true, label: '' },
           { icon: Settings, label: 'Properties', disabled: true }
         ];
       case 'folder':
         return [
           { icon: FileText, label: 'Open', action: onOpen },
-          { divider: true },
+          { divider: true, label: '' },
           {
             icon: FolderPlus,
             label: 'New',
@@ -102,7 +102,7 @@ export function ContextMenu({
               { icon: HardDrive, label: 'Size', disabled: true }
             ]
           },
-          { divider: true },
+          { divider: true, label: '' },
           { icon: Pencil, label: 'Rename', action: onRename },
           { icon: Trash2, label: 'Delete', action: onDelete }
         ];
@@ -116,7 +116,7 @@ export function ContextMenu({
               { icon: FolderPlus, label: 'Folder', action: onNewFolder }
             ]
           },
-          { divider: true },
+          { divider: true, label: '' },
           {
             icon: SortAsc,
             label: 'Sort by',
@@ -132,9 +132,9 @@ export function ContextMenu({
             { label: 'Medium icons', disabled: true },
             { label: 'Small icons', disabled: true },
           ]},
-          { divider: true },
+          { divider: true, label: '' },
           { icon: RefreshCw, label: 'Refresh', action: () => window.location.reload() },
-          { divider: true },
+          { divider: true, label: '' },
           { icon: ImageIcon, label: 'Change Background', disabled: true },
           { icon: MonitorSmartphone, label: 'Display Settings', disabled: true }
         ];
@@ -259,7 +259,7 @@ export function ContextMenu({
       <div className="py-1">
         {menuItems.map((item, index) => (
           <React.Fragment key={index}>
-            {item.divider ? (
+            {'divider' in item ? (
               <div className="h-px bg-border my-1" />
             ) : (
               <button
@@ -277,7 +277,7 @@ export function ContextMenu({
                 {item.submenu && <ChevronRight className="h-4 w-4" />}
               </button>
             )}
-            {item.submenu && renderSubmenu(item.submenu, item.label)}
+            {!('divider' in item) && item.submenu && renderSubmenu(item.submenu, item.label)}
           </React.Fragment>
         ))}
       </div>

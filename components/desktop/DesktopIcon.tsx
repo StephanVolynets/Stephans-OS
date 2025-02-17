@@ -145,8 +145,8 @@ export function DesktopIcon({
         scale: isDragging ? 1.05 : 1,
       }}
       draggable={!isEditing}
-      onDragStart={onDragStart}
-      onDrag={onDrag}
+      onDragStart={(e: any) => onDragStart(e as React.DragEvent)}
+      onDrag={(e: any) => onDrag(e as React.DragEvent)}
       onDragEnd={onDragEnd}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}

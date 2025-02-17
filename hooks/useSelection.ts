@@ -17,7 +17,7 @@ interface UseSelectionOptions {
 export function useSelection({ containerRef, onSelectionChange }: UseSelectionOptions) {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionBox, setSelectionBox] = useState<SelectionBox | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const selectedIdsRef = useRef<Set<string>>(new Set());
   const startTimeRef = useRef<number>(0);
 
   const getRelativeCoordinates = useCallback((e: MouseEvent | React.MouseEvent) => {
@@ -41,6 +41,7 @@ export function useSelection({ containerRef, onSelectionChange }: UseSelectionOp
       currentY: y
     });
     startTimeRef.current = Date.now();
+    selectedIdsRef.current.clear();
   }, [getRelativeCoordinates]);
 
   const handleSelectionMove = useCallback((e: React.MouseEvent) => {
@@ -60,14 +61,13 @@ export function useSelection({ containerRef, onSelectionChange }: UseSelectionOp
     // Only update selection if the drag lasted longer than 150ms
     // This prevents accidental selections when clicking
     const dragDuration = Date.now() - startTimeRef.current;
-    if (dragDuration < 150) {
-      setSelectedIds([]);
+    if (dragDuration >= 150) {
+      onSelectionChange?.(Array.from(selectedIdsRef.current));
     }
 
     setIsSelecting(false);
     setSelectionBox(null);
-    onSelectionChange?.(selectedIds);
-  }, [isSelecting, selectedIds, onSelectionChange]);
+  }, [isSelecting, onSelectionChange]);
 
   const isIntersecting = useCallback((iconRect: DOMRect) => {
     if (!selectionBox || !containerRef.current) return false;
@@ -98,26 +98,26 @@ export function useSelection({ containerRef, onSelectionChange }: UseSelectionOp
   const updateSelection = useCallback((iconId: string, iconRect: DOMRect) => {
     if (!isSelecting || !selectionBox) return;
 
-    setSelectedIds(prev => {
-      const isCurrentlySelected = prev.includes(iconId);
-      const shouldBeSelected = isIntersecting(iconRect);
+    const shouldBeSelected = isIntersecting(iconRect);
+    const isCurrentlySelected = selectedIdsRef.current.has(iconId);
 
-      if (isCurrentlySelected === shouldBeSelected) return prev;
-      return shouldBeSelected
-        ? [...prev, iconId]
-        : prev.filter(id => id !== iconId);
-    });
+    if (shouldBeSelected !== isCurrentlySelected) {
+      if (shouldBeSelected) {
+        selectedIdsRef.current.add(iconId);
+      } else {
+        selectedIdsRef.current.delete(iconId);
+      }
+    }
   }, [isSelecting, selectionBox, isIntersecting]);
 
   const clearSelection = useCallback(() => {
-    setSelectedIds([]);
+    selectedIdsRef.current.clear();
     onSelectionChange?.([]);
   }, [onSelectionChange]);
 
   return {
     isSelecting,
     selectionBox,
-    selectedIds,
     handleSelectionStart,
     handleSelectionMove,
     handleSelectionEnd,

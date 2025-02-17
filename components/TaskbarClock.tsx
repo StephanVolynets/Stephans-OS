@@ -1,18 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Calendar, { CalendarProps } from "react-calendar";
+import Calendar from "react-calendar";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-calendar/dist/Calendar.css";
+import { MouseEvent } from "react";
 
-type CalendarValue = CalendarProps["value"];
+
 
 export function TaskbarClock() {
   const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<CalendarValue>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,13 +36,9 @@ export function TaskbarClock() {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside as unknown as EventListener);
+    return () => document.removeEventListener("mousedown", handleClickOutside as unknown as EventListener);
   }, []);
-
-  const handleDateChange: CalendarProps["onChange"] = (value) => {
-    setSelectedDate(value);
-  };
 
   return (
     <div ref={containerRef} className="relative">
@@ -65,14 +62,14 @@ export function TaskbarClock() {
             <div className="bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-lg p-4 min-w-[300px]">
               <div className="mb-4">
                 <h2 className="text-lg font-semibold">
-                  {format(selectedDate as Date, "MMMM d, yyyy")}
+                  {format(selectedDate, "MMMM d, yyyy")}
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  {format(selectedDate as Date, "EEEE")}
+                  {format(selectedDate, "EEEE")}
                 </p>
               </div>
               <Calendar
-                onChange={handleDateChange}
+                onChange={(value) => setSelectedDate(value instanceof Date ? value : value?.[0] ?? new Date())}
                 value={selectedDate}
                 className="react-calendar--dark"
               />
