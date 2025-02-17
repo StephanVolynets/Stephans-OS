@@ -30,14 +30,14 @@ export default function Desktop() {
   const desktopRef = useRef<HTMLDivElement>(null);
   const { menuProps, handleContextMenu, closeMenu } = useContextMenu({ containerRef: desktopRef });
   const [icons, setIcons] = useState<AppIcon[]>([
-    { id: "notepad", title: "Notepad", icon: FileText, x: 0, y: 0, color: "text-blue-400", type: "app" },
+    { id: "myPC", title: "My PC", icon: Monitor, x: 0, y: 0, color: "text-indigo-400", type: "app" },
+    { id: "public", title: "Public", icon: Users, x: 1, y: 0, color: "text-pink-400", type: "folder" },
     { id: "terminal", title: "Terminal", icon: Terminal, x: 0, y: 1, color: "text-green-400", type: "app" },
+    { id: "aboutMe", title: "About Me", icon: Info, x: 1, y: 1, color: "text-cyan-400", type: "file" },
     { id: "calculator", title: "Calculator", icon: Calculator, x: 0, y: 2, color: "text-yellow-400", type: "app" },
+    { id: "textEditor", title: "Text Editor", icon: FileEdit, x: 1, y: 2, color: "text-orange-400", type: "app" },
     { id: "imageViewer", title: "Images", icon: Image, x: 0, y: 3, color: "text-purple-400", type: "app" },
-    { id: "aboutMe", title: "About Me", icon: Info, x: 1, y: 0, color: "text-cyan-400", type: "file" },
-    { id: "myPC", title: "My PC", icon: Monitor, x: 1, y: 1, color: "text-indigo-400", type: "app" },
-    { id: "public", title: "Public", icon: Users, x: 1, y: 2, color: "text-pink-400", type: "folder" },
-    { id: "textEditor", title: "Text Editor", icon: FileEdit, x: 1, y: 3, color: "text-orange-400", type: "app" },
+    { id: "notepad", title: "Notepad", icon: FileText, x: 1, y: 3, color: "text-blue-400", type: "app" },
   ]);
 
   const [editingIcon, setEditingIcon] = useState<string | null>(null);
