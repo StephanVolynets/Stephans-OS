@@ -165,7 +165,7 @@ export function DesktopIcon({
           onClick={(e) => e.stopPropagation()}
         />
       ) : (
-        <span className="text-xs text-foreground font-medium truncate max-w-full mt-2 pointer-events-none">
+        <span className="text-white text-xs text-foreground font-medium truncate max-w-full mt-2 pointer-events-none">
           {title}
         </span>
       )}

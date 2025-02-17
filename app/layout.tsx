@@ -17,17 +17,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <link type="image/png" sizes="16x16" rel="icon" href="@/public/favi-32x32.png" />
+        <link type="image/png" sizes="16x16" rel="icon" href="/favi-16x16.png" />
+        <link type="image/png" sizes="32x32" rel="icon" href="/favi-32x32.png" />
         {/* Can add more favicon sizes if needed */}
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
         >
           <FileSystemProvider>
             {children}
