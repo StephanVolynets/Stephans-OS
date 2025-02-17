@@ -2,27 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import { toast } from "sonner";
-
-interface WindowPosition {
-  x: number;
-  y: number;
-  width: number | string;
-  height: number | string;
-}
-
-interface Window {
-  id: string;
-  title: string;
-  content: React.ReactNode;
-  x: number;
-  y: number;
-  width: number | string;
-  height: number | string;
-  focused: boolean;
-  minimized: boolean;
-  zIndex: number;
-  prevPosition?: WindowPosition;
-}
+import type { Window, WindowPosition, WindowContent } from "@/types/global";
 
 interface WindowsContextType {
   windows: Window[];
@@ -39,7 +19,7 @@ export function WindowsProvider({ children }: { children: React.ReactNode }) {
   const [windows, setWindows] = useState<Window[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1);
 
-  const isWindowOpen = (id: string) => {
+  const isWindowOpen = (id: string): boolean => {
     return windows.some((w) => w.id === id);
   };
 
@@ -63,7 +43,7 @@ export function WindowsProvider({ children }: { children: React.ReactNode }) {
       {
         id: window.id || Math.random().toString(),
         title: window.title || "Window",
-        content: window.content || null,
+        content: window.content || { type: 'default', content: null },
         x: window.x || 100,
         y: window.y || 100,
         width: window.width || 600,
@@ -71,7 +51,7 @@ export function WindowsProvider({ children }: { children: React.ReactNode }) {
         focused: true,
         minimized: false,
         zIndex: nextZIndex,
-      },
+      } as Window,
     ]);
     setNextZIndex((prev) => prev + 1);
   };

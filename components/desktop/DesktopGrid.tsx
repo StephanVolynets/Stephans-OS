@@ -1,29 +1,24 @@
 "use client";
 
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback, useEffect } from "react";
 import { useGrid } from "@/hooks/useGrid";
 import { useSelection } from "@/hooks/useSelection";
 import { DesktopIcon } from "./DesktopIcon";
 import { SelectionBox } from "./SelectionBox";
 import { AnimatePresence } from "framer-motion";
+import type { AppIcon } from "@/types/global";
 
 interface DesktopGridProps {
-  icons: Array<{
-    id: string;
-    title: string;
-    icon: any;
-    x: number;
-    y: number;
-    color: string;
-  }>;
+  icons: AppIcon[];
   selectedIcons: Set<string>;
   onSelectionChange: (selectedIds: string[]) => void;
-  onIconsChange?: (icons: any[]) => void;
-  onIconOpen?: (icon: any) => void;
+  onIconsChange?: (icons: AppIcon[]) => void;
+  onIconOpen?: (icon: AppIcon) => void;
   onContextMenu: (e: React.MouseEvent, type: 'desktop' | 'file' | 'folder', targetId?: string) => void;
   editingIcon?: string | null;
   onRenameComplete?: (id: string, newName: string) => void;
   children?: React.ReactNode;
+  columns?: number;
 }
 
 function DesktopGridInternal({
@@ -36,6 +31,7 @@ function DesktopGridInternal({
   editingIcon,
   onRenameComplete,
   children,
+  columns = 4,
 }: DesktopGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -61,20 +57,21 @@ function DesktopGridInternal({
     initialItems,
     selectedItems: selectedIcons,
     onItemsChange: (newItems) => {
+      if (!onIconsChange) return;
       const updatedIcons = icons.map((icon) => {
         const item = newItems.find((i) => i.id === icon.id);
         return item
           ? { ...icon, x: item.position.x, y: item.position.y }
           : icon;
       });
-      onIconsChange?.(updatedIcons);
+      onIconsChange(updatedIcons);
     },
+    // columns,
   });
 
   const {
     isSelecting,
     selectionBox,
-    selectedIds,
     handleSelectionStart,
     handleSelectionMove,
     handleSelectionEnd,
@@ -91,7 +88,7 @@ function DesktopGridInternal({
     }
   }, [onContextMenu]);
 
-  const handleIconOpen = useCallback((icon: any) => {
+  const handleIconOpen = useCallback((icon: AppIcon) => {
     onIconOpen?.(icon);
   }, [onIconOpen]);
 
@@ -116,9 +113,30 @@ function DesktopGridInternal({
   const handleDesktopClick = useCallback((e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains("desktop-grid")) {
       onSelectionChange([]);
-      clearSelection();
     }
-  }, [clearSelection, onSelectionChange]);
+  }, [onSelectionChange]);
+
+  useEffect(() => {
+    if (!isSelecting || !selectionBox || !gridDimensions) return;
+
+    const updateSelections = () => {
+      items.forEach(item => {
+        const icon = icons.find(i => i.id === item.id);
+        if (!icon) return;
+
+        const rect = new DOMRect(
+          item.position.x * (gridDimensions.cellWidth + gridDimensions.gap),
+          item.position.y * (gridDimensions.cellHeight + gridDimensions.gap),
+          gridDimensions.cellWidth,
+          gridDimensions.cellHeight
+        );
+
+        updateSelection(icon.id, rect);
+      });
+    };
+
+    requestAnimationFrame(updateSelections);
+  }, [items, icons, isSelecting, selectionBox, gridDimensions, updateSelection]);
 
   return (
     <div
@@ -138,7 +156,6 @@ function DesktopGridInternal({
     >
       {children}
 
-      {/* Drag Image */}
       <div
         ref={dragImageRef}
         className="fixed -left-[9999px] -top-[9999px] pointer-events-none"
@@ -148,7 +165,6 @@ function DesktopGridInternal({
         }}
       />
 
-      {/* Selection Box */}
       <AnimatePresence>
         {selectionBox && (
           <SelectionBox
@@ -160,7 +176,6 @@ function DesktopGridInternal({
         )}
       </AnimatePresence>
 
-      {/* Icons */}
       {items.map((item) => {
         const icon = icons.find((i) => i.id === item.id);
         if (!icon || !gridDimensions) return null;

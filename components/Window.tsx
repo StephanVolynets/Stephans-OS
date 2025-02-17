@@ -5,6 +5,11 @@ import { useWindows } from "@/contexts/WindowsContext";
 import { cn } from "@/lib/utils";
 import { WindowTitleBar } from "./window/WindowTitleBar";
 import { useWindowDrag } from "@/hooks/useWindowDrag";
+import { TextEditor } from "./TextEditor";
+import { FileExplorer } from "./FileExplorer";
+import { AboutMeContent } from "./AboutMeContent";
+import type { Window as WindowType, WindowContent } from "@/types/global";
+
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 200;
@@ -72,31 +77,24 @@ function ResizeHandle({ direction, onResizeStart }: ResizeHandleProps) {
   );
 }
 
-interface WindowProps {
-  id: string;
-  title: string;
-  content: React.ReactNode;
-  x: number;
-  y: number;
-  width: number | string;
-  height: number | string;
-  focused: boolean;
-  minimized: boolean;
-  zIndex: number;
+function renderWindowContent(content: WindowContent) {
+  switch (content.type) {
+    case 'text-editor':
+      return <TextEditor id={content.id} />;
+    case 'file-explorer':
+      return (
+        <FileExplorer
+          icons={content.icons}
+          aboutMeContent={<AboutMeContent />}
+        />
+      );
+    case 'about':
+    case 'default':
+      return content.content;
+  }
 }
 
-export default function Window({
-  id,
-  title,
-  content,
-  x,
-  y,
-  width,
-  height,
-  focused,
-  minimized,
-  zIndex,
-}: WindowProps) {
+export default function Window(props: WindowType) {
   const { closeWindow, focusWindow, updateWindow } = useWindows();
 
   const {
@@ -108,12 +106,12 @@ export default function Window({
     handleResizeStart,
     toggleMaximize,
   } = useWindowDrag({
-    id,
+    id: props.id,
     initialState: {
-      x,
-      y,
-      width,
-      height,
+      x: props.x,
+      y: props.y,
+      width: props.width,
+      height: props.height,
       isMaximized: false,
     },
     minSize: {
@@ -122,7 +120,7 @@ export default function Window({
     },
     taskbarHeight: TASKBAR_HEIGHT,
     onStateChange: (newState) => {
-      updateWindow(id, {
+      updateWindow(props.id, {
         x: newState.x,
         y: newState.y,
         width: newState.width,
@@ -131,7 +129,7 @@ export default function Window({
     },
   });
 
-  if (minimized) return null;
+  if (props.minimized) return null;
 
   return (
     <motion.div
@@ -144,7 +142,7 @@ export default function Window({
         y: state.y,
         width: state.width,
         height: state.height,
-        zIndex,
+        zIndex: props.zIndex,
       }}
       transition={{
         duration: 0.2,
@@ -154,24 +152,24 @@ export default function Window({
       }}
       className={cn(
         "fixed bg-background/95 backdrop-blur rounded-lg shadow-lg overflow-hidden border border-border",
-        focused ? "shadow-xl" : "shadow-md",
+        props.focused ? "shadow-xl" : "shadow-md",
         (isDragging || isResizing) && "pointer-events-none select-none",
         isResizing && "transition-none"
       )}
-      onClick={() => !focused && focusWindow(id)}
-      style={{ zIndex }}
+      onClick={() => !props.focused && focusWindow(props.id)}
+      style={{ zIndex: props.zIndex }}
     >
       <WindowTitleBar
-        title={title}
+        title={props.title}
         isMaximized={state.isMaximized}
-        onMinimize={() => updateWindow(id, { minimized: true })}
+        onMinimize={() => updateWindow(props.id, { minimized: true })}
         onMaximize={toggleMaximize}
-        onClose={() => closeWindow(id)}
+        onClose={() => closeWindow(props.id)}
         onPointerDown={handleDragStart}
       />
 
       <div className="p-4 overflow-auto" style={{ height: `calc(100% - 32px)` }}>
-        {content}
+        {renderWindowContent(props.content)}
       </div>
 
       {!state.isMaximized && (

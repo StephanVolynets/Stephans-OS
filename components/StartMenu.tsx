@@ -4,15 +4,12 @@ import { useWindows } from "@/contexts/WindowsContext";
 import { Button } from "@/components/ui/button";
 import { FileText, Terminal, Calculator, Image, Settings } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { WindowContent } from "@/types/global";
 
+
+// Define the props interface
 interface StartMenuProps {
-  onClose: () => void;
-}
-
-interface AppIcon {
-  id: string;
-  title: string;
-  icon: React.ComponentType<any>;
+  onClose: () => void; // Specify the type for onClose
 }
 
 export default function StartMenu({ onClose }: StartMenuProps) {
@@ -26,22 +23,21 @@ export default function StartMenu({ onClose }: StartMenuProps) {
       }
     };
 
-    // Add a small delay to prevent immediate closure when clicking inside the menu
-    const timer = setTimeout(() => {
-      window.addEventListener("click", handleClickOutside);
-    }, 100);
+    // Small delay to prevent immediate closure
+    setTimeout(() => {
+      window.addEventListener('click', handleClickOutside);
+    }, 0);
 
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("click", handleClickOutside);
-    };
+    return () => window.removeEventListener('click', handleClickOutside);
   }, [onClose]);
 
-  const handleAppClick = (app: AppIcon) => {
+
+  
+  const handleAppClick = (app: { id: string; title: string; icon: React.ElementType }) => {
     openWindow({
       id: app.id,
       title: app.title,
-      content: `Content for ${app.title}`,
+      content: `Content for ${app.title}` as unknown as WindowContent,
       x: 100,
       y: 100,
       width: 600,
@@ -50,7 +46,7 @@ export default function StartMenu({ onClose }: StartMenuProps) {
     onClose();
   };
 
-  const apps: AppIcon[] = [
+  const apps = [
     { id: "notepad", title: "Notepad", icon: FileText },
     { id: "terminal", title: "Terminal", icon: Terminal },
     { id: "calculator", title: "Calculator", icon: Calculator },
