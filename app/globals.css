@@ -1,320 +1,335 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+     :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+     :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 0%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --background: 0 0% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 0 0% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 0 0% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 0 0% 9%;
+        --secondary: 0 0% 14.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 14.9%;
+        --muted-foreground: 0 0% 63.9%;
+        --accent: 0 0% 14.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 14.9%;
+        --input: 0 0% 14.9%;
+        --ring: 0 0% 83.1%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border cursor-default;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  
-  html, body {
-    @apply h-full overflow-visible;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
+    * {
+        @apply border-border cursor-default;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    html,
+    body {
+        @apply h-full overflow-visible;
+    }
+    /* Force dark mode styles */
+    body.dark-mode {
+        background-color: hsl(var(--background));
+        /* Use dark background */
+        color: hsl(var(--foreground));
+        /* Use light text color */
+    }
 }
+
 
 /* Modern cursor styles */
+
 [draggable="true"] {
-  cursor: grab;
+    cursor: grab;
 }
 
 [draggable="true"]:active {
-  cursor: grabbing;
+    cursor: grabbing;
 }
 
+
 /* Icon highlight and hover effects */
+
 .highlight-hover {
-  @apply transition-all duration-100 ease-out;
-  will-change: transform, background-color;
+    @apply transition-all duration-100 ease-out;
+    will-change: transform, background-color;
 }
 
 .highlight-hover:hover {
-  @apply bg-accent/10 scale-[1.02];
+    @apply bg-accent/10 scale-[1.02];
 }
 
 .highlight-hover:active {
-  @apply bg-accent/20 scale-[0.98];
+    @apply bg-accent/20 scale-[0.98];
 }
+
 
 /* Selection styles */
+
 ::selection {
-  @apply bg-primary/20 text-foreground;
+    @apply bg-primary/20 text-foreground;
 }
 
+
 /* Animated gradient background */
+
 .animated-gradient {
-  background: linear-gradient(
-    -45deg,
-    #1c1a48, /* Deep Midnight Blue */
+    background: linear-gradient( -45deg, #1c1a48, /* Deep Midnight Blue */
     #3a2c67, /* Dark Royal Purple */
     #00223e, /* Dark Blue (Prussian Blue) */
-    #363795 /* Deep Royal Blue */
-  );
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+    #363795/* Deep Royal Blue */
+    );
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 @keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
+
 /* Calendar Styles */
+
 .react-calendar {
-  width: 100%;
-  background-color: hsl(var(--card)) !important;
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  font-family: inherit;
-  line-height: 1.125em;
-  padding: 0.5rem;
+    width: 100%;
+    background-color: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    font-family: inherit;
+    line-height: 1.125em;
+    padding: 0.5rem;
 }
 
 .react-calendar--doubleView {
-  width: 700px;
+    width: 700px;
 }
 
 .react-calendar--doubleView .react-calendar__viewContainer {
-  display: flex;
-  margin: -0.5em;
+    display: flex;
+    margin: -0.5em;
 }
 
-.react-calendar--doubleView .react-calendar__viewContainer > * {
-  width: 50%;
-  margin: 0.5em;
+.react-calendar--doubleView .react-calendar__viewContainer>* {
+    width: 50%;
+    margin: 0.5em;
 }
 
 .react-calendar,
 .react-calendar *,
 .react-calendar *:before,
 .react-calendar *:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
+
 /* Navigation styling */
+
 .react-calendar button {
-  margin: 0;
-  border: 0;
-  outline: none;
-  color: hsl(var(--foreground));
-  background-color: transparent !important;
+    margin: 0;
+    border: 0;
+    outline: none;
+    color: hsl(var(--foreground));
+    background-color: transparent !important;
 }
 
 .react-calendar button:enabled:hover {
-  cursor: pointer;
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--accent-foreground));
+    cursor: pointer;
+    background-color: hsl(var(--accent)) !important;
+    color: hsl(var(--accent-foreground));
 }
 
 .react-calendar__navigation {
-  display: flex;
-  height: 44px;
-  margin-bottom: 1em;
+    display: flex;
+    height: 44px;
+    margin-bottom: 1em;
 }
 
 .react-calendar__navigation button {
-  min-width: 44px;
-  background: none;
-  font-size: 16px;
-  color: hsl(var(--foreground));
+    min-width: 44px;
+    background: none;
+    font-size: 16px;
+    color: hsl(var(--foreground));
 }
 
 .react-calendar__navigation button:disabled {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--accent-foreground));
-  border-radius: var(--radius);
+    background-color: hsl(var(--accent)) !important;
+    color: hsl(var(--accent-foreground));
+    border-radius: var(--radius);
 }
 
+
 /* Calendar grid */
+
 .react-calendar__month-view__weekdays {
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 0.8em;
-  color: hsl(var(--foreground));
-  padding: 0.5em;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.8em;
+    color: hsl(var(--foreground));
+    padding: 0.5em;
 }
 
 .react-calendar__month-view__weekdays__weekday {
-  padding: 0.5em;
-  color: hsl(var(--foreground));
+    padding: 0.5em;
+    color: hsl(var(--foreground));
 }
 
 .react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none;
-  color: hsl(var(--foreground));
+    text-decoration: none;
+    color: hsl(var(--foreground));
 }
 
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75em;
-  font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em;
+    font-weight: bold;
 }
 
 .react-calendar__month-view__days__day {
-  color: hsl(var(--foreground));
+    color: hsl(var(--foreground));
 }
 
 .react-calendar__month-view__days__day--weekend {
-  color: hsl(var(--destructive));
+    color: hsl(var(--destructive));
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
-  color: hsl(var(--muted-foreground));
+    color: hsl(var(--muted-foreground));
 }
 
+
 /* Calendar tiles */
+
 .react-calendar__tile {
-  max-width: 100%;
-  padding: 10px 6.6667px;
-  background: none;
-  text-align: center;
-  line-height: 16px;
-  font-size: 0.9em;
-  color: hsl(var(--foreground));
+    max-width: 100%;
+    padding: 10px 6.6667px;
+    background: none;
+    text-align: center;
+    line-height: 16px;
+    font-size: 0.9em;
+    color: hsl(var(--foreground));
 }
 
 .react-calendar__tile:disabled {
-  opacity: 0.5;
-  background-color: transparent !important;
+    opacity: 0.5;
+    background-color: transparent !important;
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--accent-foreground));
-  border-radius: var(--radius);
+    background-color: hsl(var(--accent)) !important;
+    color: hsl(var(--accent-foreground));
+    border-radius: var(--radius);
 }
 
 .react-calendar__tile--now {
-  background-color: hsl(var(--primary)) !important;
-  color: hsl(var(--primary-foreground));
-  border-radius: var(--radius);
+    background-color: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground));
+    border-radius: var(--radius);
 }
 
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
-  background-color: hsl(var(--primary)) !important;
-  opacity: 0.8;
+    background-color: hsl(var(--primary)) !important;
+    opacity: 0.8;
 }
 
 .react-calendar__tile--hasActive {
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--accent-foreground));
+    background-color: hsl(var(--accent)) !important;
+    color: hsl(var(--accent-foreground));
 }
 
 .react-calendar__tile--hasActive:enabled:hover,
 .react-calendar__tile--hasActive:enabled:focus {
-  background-color: hsl(var(--accent)) !important;
-  opacity: 0.8;
+    background-color: hsl(var(--accent)) !important;
+    opacity: 0.8;
 }
 
 .react-calendar__tile--active {
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--accent-foreground));
-  border-radius: var(--radius);
+    background-color: hsl(var(--accent)) !important;
+    color: hsl(var(--accent-foreground));
+    border-radius: var(--radius);
 }
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background-color: hsl(var(--accent)) !important;
-  opacity: 0.8;
+    background-color: hsl(var(--accent)) !important;
+    opacity: 0.8;
 }

@@ -1,13 +1,14 @@
 "use client";
 
+import React from 'react';
 import Desktop from "@/components/Desktop";
 import Taskbar from "@/components/Taskbar";
 import { WindowsProvider } from "@/contexts/WindowsContext";
-import { ThemeProvider } from "next-themes";
+import { FileSystemProvider } from "@/contexts/FileSystemContext";
 
-export default function Home() {
+const Page: React.FC = () => {
   return (
-    <ThemeProvider attribute="class">
+    <FileSystemProvider>
       <WindowsProvider>
         <div className="h-screen w-screen overflow-visible flex flex-col">
           <div className="animated-gradient" aria-hidden="true" />
@@ -15,6 +16,8 @@ export default function Home() {
           <Taskbar />
         </div>
       </WindowsProvider>
-    </ThemeProvider>
+    </FileSystemProvider>
   );
-}
+};
+
+export default Page;
