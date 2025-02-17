@@ -1,15 +1,29 @@
-# DESKTOP Environment Portfolio Project :floppy_disk:
+# DESKTOP Environment Portfolio Project :art:
 
 ## Overview
 
 **My project** is an interactive, web based desktop operating system environment built as a portfolio project, drawing inspiration from Dustin Brett’s **daedalOS**. It demonstrates a wide range of frontend and systems programming skills, focusing on a blend of user experience, scalability, and optimization. The goal is to emulate desktop like functionality, providing a platform where users can interact with applications, files, and features within a web browser.
 
+<h1 align="center">Snapshot</h1>
+
+<p>
+   <img src="https://github.com/user-attachments/assets/82744500-eb26-4e6d-87cf-40a7f2cbdfc7" alt="Desktop Browser" style="width:100% height="700">
+        <br>
+
+</p>
+
+ <p align="center">
+    <img src="https://github.com/user-attachments/assets/581b8f41-2b95-4c60-bcca-da9b1f6fb39d" alt="Desktop Browser"  width="300" >
+     
+ </p>
+
+
    
 
 ## Technologies Used
 
-  **TypeScript**: Strongly typed language for scalable and maintainable code.
-  **React/Next.js**: Frontend framework used for dynamic rendering and routing.
+  **TypeScript**: Strongly typed, good for scalable and maintainable code.
+  **React/Next.js**: For dynamic rendering and routing.
   **CSS (with custom animations)**: Used to style and create animations for the desktop environment.
   **Framer Motion**: For fluid animations and transitions.
   **TINYmce**: A WYSIWYG text editor for file editing.
