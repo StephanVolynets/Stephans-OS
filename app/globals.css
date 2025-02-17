@@ -117,7 +117,7 @@
 /* Selection styles */
 
 ::selection {
-    @apply bg-primary/60 text-foreground;
+    @apply bg-primary/20 text-foreground;
 }
 
 
