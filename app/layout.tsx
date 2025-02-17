@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link type="image/png" sizes="16x16" rel="icon" href="/public/favi-32x32.png" />
+        <link type="image/png" sizes="16x16" rel="icon" href="@/public/favi-32x32.png" />
         {/* Can add more favicon sizes if needed */}
       </head>
       <body className={inter.className}>
