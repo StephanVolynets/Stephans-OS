@@ -1,5 +1,5 @@
-# DESKTOP Environment Portfolio Project :art:
-
+# :art: DESKTOP Environment Portfolio Project :art: 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ab3bb5b6-b35e-4b94-976b-b5f3f4a99ed2/deploy-status)](https://app.netlify.com/sites/stephos/deploys)
 ## Overview
 
 **My project** is an interactive, web based desktop operating system environment built as a portfolio project, drawing inspiration from Dustin Brett’s **daedalOS**. It demonstrates a wide range of frontend and systems programming skills, focusing on a blend of user experience, scalability, and optimization. The goal is to emulate desktop like functionality, providing a platform where users can interact with applications, files, and features within a web browser.
