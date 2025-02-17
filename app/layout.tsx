@@ -18,6 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link type="image/png" sizes="16x16" rel="icon" href="/public/favi-16x16.png" />
+        {/* You can add more favicon sizes if needed */}
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
