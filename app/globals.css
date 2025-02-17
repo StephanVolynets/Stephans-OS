@@ -81,12 +81,8 @@
     body {
         @apply h-full overflow-visible;
     }
-    /* Force dark mode styles */
-    body.dark-mode {
-        background-color: hsl(var(--background));
-        /* Use dark background */
-        color: hsl(var(--foreground));
-        /* Use light text color */
+    body {
+        @apply bg-background text-foreground;
     }
 }
 
@@ -110,18 +106,18 @@
 }
 
 .highlight-hover:hover {
-    @apply bg-accent/10 scale-[1.02];
+    @apply bg-blue-500/30 scale-[1.02];
 }
 
 .highlight-hover:active {
-    @apply bg-accent/20 scale-[0.98];
+    @apply bg-blue-500/50 scale-[0.98];
 }
 
 
 /* Selection styles */
 
 ::selection {
-    @apply bg-primary/20 text-foreground;
+    @apply bg-primary/60 text-foreground;
 }
 
 
