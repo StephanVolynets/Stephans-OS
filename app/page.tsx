@@ -5,6 +5,7 @@ import Desktop from "@/components/Desktop";
 import Taskbar from "@/components/Taskbar";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { FileSystemProvider } from "@/contexts/FileSystemContext";
+import { AssistantGuide } from "@/components/AssistantGuide";
 
 const Page: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const Page: React.FC = () => {
           <div className="animated-gradient" aria-hidden="true" />
           <Desktop />
           <Taskbar />
+          <AssistantGuide />
         </div>
       </WindowsProvider>
     </FileSystemProvider>
