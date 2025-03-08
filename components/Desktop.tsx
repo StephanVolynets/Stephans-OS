@@ -93,6 +93,10 @@ export default function Desktop() {
         width = 400;
         height = 500;
         break;
+      case 'readme':
+        width = 900;
+        height = 700;
+        break;
     }
 
     const position = getRandomWindowPosition(width, height);
