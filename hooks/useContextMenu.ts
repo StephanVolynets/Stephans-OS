@@ -15,7 +15,7 @@ export function useContextMenu({ containerRef }: UseContextMenuOptions) {
   const [menuProps, setMenuProps] = useState<{
     isOpen: boolean;
     position: MenuPosition;
-    type: 'desktop' | 'file' | 'folder';
+    type: 'desktop' | 'file' | 'folder' | 'app';
     targetId?: string;
   }>({
     isOpen: false,
@@ -25,7 +25,7 @@ export function useContextMenu({ containerRef }: UseContextMenuOptions) {
 
   const handleContextMenu = useCallback((
     e: React.MouseEvent,
-    type: 'desktop' | 'file' | 'folder' = 'desktop',
+    type: 'desktop' | 'file' | 'folder' | 'app' = 'desktop',
     targetId?: string
   ) => {
     e.preventDefault();

@@ -40,7 +40,7 @@ interface MenuItem {
 interface ContextMenuProps {
   x: number;
   y: number;
-  type: 'desktop' | 'file' | 'folder';
+  type: 'desktop' | 'file' | 'folder' | 'app';
   onOpen?: () => void;
   onNewTextFile?: () => void;
   onNewFolder?: () => void;
@@ -70,13 +70,16 @@ export function ContextMenu({
   const getMenuItems = (): (MenuItem | { divider: true })[] => {
     switch (type) {
       case 'file':
+      case 'app':
         return [
           { icon: FileText, label: 'Open', action: onOpen },
           { divider: true, label: '' },
-          { icon: Pencil, label: 'Rename', action: onRename },
-          { icon: Copy, label: 'Duplicate', action: onDuplicate },
-          { icon: Trash2, label: 'Delete', action: onDelete },
-          { divider: true, label: '' },
+          ...(type === 'file' ? [
+            { icon: Pencil, label: 'Rename', action: onRename },
+            { icon: Copy, label: 'Duplicate', action: onDuplicate },
+            { icon: Trash2, label: 'Delete', action: onDelete },
+            { divider: true, label: '' },
+          ] : []),
           { icon: Settings, label: 'Properties', disabled: true }
         ];
       case 'folder':

@@ -12,6 +12,7 @@ import {
   Layout,
   FileQuestion,
   Settings,
+  Calendar as CalendarIcon
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Calculator as CalculatorApp } from "@/components/Calculator";
@@ -19,12 +20,143 @@ import { WeatherApp } from "@/components/WeatherApp";
 import { MemoryGame } from "@/components/MemoryGame";
 import { ReadmeContent } from "@/components/ReadmeContent";
 import { AboutMeContent } from "@/components/AboutMeContent";
-import {Calendar } from "@/components/Calender";
+import { Calendar } from "@/components/Calender";
 import type { WindowContent } from "@/types/global";
 
 interface StartMenuProps {
   onClose: () => void;
 }
+
+interface AppDefinition {
+  id: string;
+  title: string;
+  icon: typeof Terminal;
+  color: string;
+  content: WindowContent;
+  width: number;
+  height: number;
+}
+
+const apps: AppDefinition[] = [
+  { 
+    id: "weather", 
+    title: "Weather", 
+    icon: Cloud,
+    color: "text-sky-400",
+    content: {
+      type: 'default',
+      content: <WeatherApp />
+    },
+    width: 400,
+    height: 500
+  },
+  { 
+    id: "terminal", 
+    title: "Terminal", 
+    icon: Terminal,
+    color: "text-green-400",
+    content: {
+      type: 'default',
+      content: (
+        <div className="font-mono p-4 bg-black text-green-400">
+          <p>Terminal not implemented yet.</p>
+          <p className="animate-pulse">▋</p>
+        </div>
+      )
+    },
+    width: 600,
+    height: 400
+  },
+  { 
+    id: "aboutMe", 
+    title: "About Me", 
+    icon: Info,
+    color: "text-cyan-400",
+    content: {
+      type: 'about',
+      content: <AboutMeContent />
+    },
+    width: 600,
+    height: 400
+  },
+  { 
+    id: "calculator", 
+    title: "Calculator", 
+    icon: Calculator,
+    color: "text-yellow-400",
+    content: {
+      type: 'default',
+      content: <CalculatorApp />
+    },
+    width: 300,
+    height: 450
+  },
+  { 
+    id: "textEditor", 
+    title: "Text Editor", 
+    icon: FileEdit,
+    color: "text-orange-400",
+    content: {
+      type: 'text-editor',
+      id: 'textEditor'
+    },
+    width: 800,
+    height: 600
+  },
+  { 
+    id: "memory", 
+    title: "Memory Game", 
+    icon: Layout,
+    color: "text-purple-400",
+    content: {
+      type: 'default',
+      content: <MemoryGame />
+    },
+    width: 450,
+    height: 600
+  },
+  { 
+    id: "readme", 
+    title: "README", 
+    icon: FileQuestion,
+    color: "text-blue-400",
+    content: {
+      type: 'default',
+      content: <ReadmeContent />
+    },
+    width: 600,
+    height: 400
+  },
+  { 
+    id: "calendar", 
+    title: "Calendar", 
+    icon: CalendarIcon,
+    color: "text-rose-400",
+    content: {
+      type: 'default',
+      content: <Calendar />
+    },
+    width: 400,
+    height: 500
+  },
+  { 
+    id: "settings", 
+    title: "Settings", 
+    icon: Settings,
+    color: "text-neutral-400",
+    content: {
+      type: 'default',
+      content: (
+        <div className="p-4 prose dark:prose-invert">
+          <h2>Settings</h2>
+          <p>System settings will be implemented soon.</p>
+        </div>
+      )
+    },
+    width: 600,
+    height: 400
+  },
+];
 
 export default function StartMenu({ onClose }: StartMenuProps) {
   const { openWindow } = useWindows();
@@ -44,116 +176,7 @@ export default function StartMenu({ onClose }: StartMenuProps) {
     return () => window.removeEventListener('click', handleClickOutside);
   }, [onClose]);
 
-  const apps = [,
-    { 
-      id: "weather", 
-      title: "Weather", 
-      icon: Cloud,
-      color: "text-sky-400",
-      content: {
-        type: 'default' as const,
-        content: <WeatherApp />
-      },
-      width: 400,
-      height: 500
-    },
-    { 
-      id: "terminal", 
-      title: "Terminal", 
-      icon: Terminal,
-      color: "text-green-400",
-      content: {
-        type: 'default' as const,
-        content: (
-          <div className="font-mono p-4 bg-black text-green-400">
-            <p>Terminal not implemented yet.</p>
-            <p className="animate-pulse">▋</p>
-          </div>
-        )
-      },
-      width: 600,
-      height: 400
-    },
-    { 
-      id: "aboutMe", 
-      title: "About Me", 
-      icon: Info,
-      color: "text-cyan-400",
-      content: {
-        type: 'about' as const,
-        content: <AboutMeContent />
-      },
-      width: 600,
-      height: 400
-    },
-    { 
-      id: "calculator", 
-      title: "Calculator", 
-      icon: Calculator,
-      color: "text-yellow-400",
-      content: {
-        type: 'default' as const,
-        content: <CalculatorApp />
-      },
-      width: 300,
-      height: 450
-    },
-    { 
-      id: "textEditor", 
-      title: "Text Editor", 
-      icon: FileEdit,
-      color: "text-orange-400",
-      content: {
-        type: 'text-editor' as const,
-        id: 'textEditor'
-      },
-      width: 800,
-      height: 600
-    },
-    { 
-      id: "memory", 
-      title: "Memory Game", 
-      icon: Layout,
-      color: "text-purple-400",
-      content: {
-        type: 'default' as const,
-        content: <MemoryGame />
-      },
-      width: 450,
-      height: 600
-    },
-    { 
-      id: "readme", 
-      title: "README", 
-      icon: FileQuestion,
-      color: "text-blue-400",
-      content: {
-        type: 'default' as const,
-        content: <ReadmeContent />
-      },
-      width: 600,
-      height: 400
-    },
-    { 
-      id: "settings", 
-      title: "Settings", 
-      icon: Settings,
-      color: "text-neutral-400",
-      content: {
-        type: 'default' as const,
-        content: (
-          <div className="p-4 prose dark:prose-invert">
-            <h2>Settings</h2>
-            <p>System settings will be implemented soon.</p>
-          </div>
-        )
-      },
-      width: 600,
-      height: 400
-    },
-  ];
-
-  const handleAppClick = (app: typeof apps[0]) => {
+  const handleAppClick = (app: AppDefinition) => {
     const centerX = (window.innerWidth - app.width) / 2;
     const centerY = (window.innerHeight - app.height) / 2;
     const offsetX = (Math.random() - 0.5) * 200;

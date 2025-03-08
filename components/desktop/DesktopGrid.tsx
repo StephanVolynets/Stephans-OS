@@ -14,7 +14,7 @@ interface DesktopGridProps {
   onSelectionChange: (selectedIds: string[]) => void;
   onIconsChange?: (icons: AppIcon[]) => void;
   onIconOpen?: (icon: AppIcon) => void;
-  onContextMenu: (e: React.MouseEvent, type: 'desktop' | 'file' | 'folder', targetId?: string) => void;
+  onContextMenu: (e: React.MouseEvent, type: 'desktop' | 'file' | 'folder' | 'app', targetId?: string) => void;
   editingIcon?: string | null;
   onRenameComplete?: (id: string, newName: string) => void;
   children?: React.ReactNode;
@@ -66,7 +66,6 @@ function DesktopGridInternal({
       });
       onIconsChange(updatedIcons);
     },
-    // columns,
   });
 
   const {
@@ -192,6 +191,7 @@ function DesktopGridInternal({
             height={gridDimensions.cellHeight}
             gap={gridDimensions.gap}
             color={icon.color}
+            type={icon.type}
             isDragging={draggedItems.has(item.id)}
             isSelected={selectedIcons.has(item.id)}
             isEditing={editingIcon === icon.id}

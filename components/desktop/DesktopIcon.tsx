@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 
 interface ClickInfo {
@@ -24,9 +24,10 @@ interface DesktopIconProps {
   isSelected: boolean;
   isEditing?: boolean;
   color: string;
+  type: 'app' | 'file' | 'folder';
   onSelect: (e: React.MouseEvent) => void;
   onOpen: (id: string) => void;
-  onContextMenu: (e: React.MouseEvent, type: 'desktop' | 'file' | 'folder', targetId?: string) => void;
+  onContextMenu: (e: React.MouseEvent, type: 'desktop' | 'file' | 'folder' | 'app', targetId?: string) => void;
   onDragStart: (e: React.DragEvent) => void;
   onDrag: (e: React.DragEvent) => void;
   onDragEnd: () => void;
@@ -50,6 +51,7 @@ export function DesktopIcon({
   isSelected,
   isEditing,
   color,
+  type,
   onSelect,
   onOpen,
   onContextMenu,
@@ -110,8 +112,8 @@ export function DesktopIcon({
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onContextMenu(e, 'file', id);
-  }, [id, onContextMenu]);
+    onContextMenu(e, type, id);
+  }, [id, onContextMenu, type]);
 
   const handleRenameComplete = useCallback((e: React.KeyboardEvent | React.FocusEvent) => {
     if ('key' in e && e.key !== 'Enter') {
