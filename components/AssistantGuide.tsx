@@ -6,14 +6,15 @@ import { Bot, MessageCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const tips = [
-  "Hi! I'm Steph, your friendly assistant! 👋",
-  "This project is currently a work in progress, but feel free to explore! 🚧",
+  "Hi! I'm Steph, your friendly assistant!. 👋",
+  "Drag me around by clicking and holding! ✨",
   "Double click icons to open applications!",
+  "Right click icons for more options.",
   "Right click on the desktop for more options",
   "Try dragging icons to rearrange them",
   "Click the start menu to explore more apps",
   "You can resize windows by dragging their edges",
-  "Drag me around by clicking and holding! ✨",
+  "This project is currently a work in progress, but feel free to explore! 🚧"
 ];
 
 export function AssistantGuide() {
@@ -39,37 +40,35 @@ export function AssistantGuide() {
     setAutoAdvance(false);
   };
 
-  const centerAssistant = () => {
-    x.set(window.innerWidth / 2 - 100);
-    y.set(window.innerHeight / 2 - 100);
+  const positionAssistantTopRight = () => {
+    const margin = 20; // Distance from edges
+    x.set(window.innerWidth - 300); // Position from right
+    y.set(margin); // Position from top
   };
 
   const checkBounds = () => {
     const currentX = x.get();
     const currentY = y.get();
-    const margin = 50; // Minimum distance from screen edge
+    const margin = 20;
+    const maxX = window.innerWidth - 300;
+    const maxY = window.innerHeight - 200;
 
-    if (
-      currentX < -margin ||
-      currentX > window.innerWidth - margin ||
-      currentY < -margin ||
-      currentY > window.innerHeight - margin
-    ) {
-      centerAssistant();
-    }
+    if (currentX < margin) x.set(margin);
+    if (currentX > maxX) x.set(maxX);
+    if (currentY < margin) y.set(margin);
+    if (currentY > maxY) y.set(maxY);
   };
 
   useEffect(() => {
-    // Center the assistant initially
-    centerAssistant();
-    window.addEventListener('resize', centerAssistant);
-    return () => window.removeEventListener('resize', centerAssistant);
+    // Position the assistant in top right initially
+    positionAssistantTopRight();
+    window.addEventListener('resize', positionAssistantTopRight);
+    return () => window.removeEventListener('resize', positionAssistantTopRight);
   }, []);
 
   useEffect(() => {
     if (isDismissed || !autoAdvance) return;
 
-    // Auto-advance tips every 5 seconds
     const tipInterval = setInterval(() => {
       setCurrentTip((prev) => (prev + 1) % tips.length);
     }, 5000);

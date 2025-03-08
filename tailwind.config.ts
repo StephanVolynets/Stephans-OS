@@ -66,9 +66,85 @@ const config: Config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            color: 'hsl(var(--foreground))',
+            h1: {
+              color: 'hsl(var(--foreground))',
+              fontSize: '2.25rem',
+              marginBottom: '1.5rem',
+            },
+            h2: {
+              color: 'hsl(var(--foreground))',
+              fontSize: '1.875rem',
+              marginTop: '2rem',
+              marginBottom: '1rem',
+            },
+            h3: {
+              color: 'hsl(var(--foreground))',
+              fontSize: '1.5rem',
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
+            },
+            p: {
+              color: 'hsl(var(--foreground))',
+              fontSize: '1rem',
+              lineHeight: '1.75',
+              marginBottom: '1.25rem',
+            },
+            a: {
+              color: 'hsl(var(--primary))',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            },
+            code: {
+              backgroundColor: 'hsl(var(--muted))',
+              padding: '0.2em 0.4em',
+              borderRadius: '0.25rem',
+              fontSize: '0.875rem',
+              fontWeight: '400',
+            },
+            'code::before': {
+              content: '""'
+            },
+            'code::after': {
+              content: '""'
+            },
+            pre: {
+              backgroundColor: 'hsl(var(--muted))',
+              padding: '1rem',
+              borderRadius: '0.5rem',
+              overflow: 'auto',
+            },
+            ul: {
+              listStyleType: 'disc',
+              paddingLeft: '1.25rem',
+            },
+            li: {
+              color: 'hsl(var(--foreground))',
+              marginBottom: '0.5rem',
+            },
+            img: {
+              borderRadius: '0.5rem',
+              margin: '2rem auto',
+            },
+            hr: {
+              borderColor: 'hsl(var(--border))',
+              margin: '2rem 0',
+            },
+          }
+        }
+      }
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography')
+  ],
 };
 
 export default config;

@@ -3,15 +3,15 @@
 import { useWindows } from "@/contexts/WindowsContext";
 import Window from "@/components/Window";
 import {
-  FileText,
   Terminal,
   Calculator,
-  Image,
-  Folder,
-  Info,
   Monitor,
-  Users,
+  Info,
   FileEdit,
+  FileQuestion,
+  Layout,
+  Cloud,
+  Calendar as CalendarIcon
 } from "lucide-react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,10 @@ import { useContextMenu } from "@/hooks/useContextMenu";
 import { generateRandomColor } from "@/lib/utils";
 import type { AppIcon, WindowContent } from "@/types/global";
 import { Calculator as CalculatorApp } from "./Calculator";
+import { ReadmeContent } from "./ReadmeContent";
+import { MemoryGame } from "./MemoryGame";
+import { WeatherApp } from "./WeatherApp";
+import { Calendar } from "./Calender";
 
 export default function Desktop() {
   const { windows, openWindow, isWindowOpen, focusWindow } = useWindows();
@@ -31,13 +35,14 @@ export default function Desktop() {
   const { menuProps, handleContextMenu, closeMenu } = useContextMenu({ containerRef: desktopRef });
   const [icons, setIcons] = useState<AppIcon[]>([
     { id: "myPC", title: "My PC", icon: Monitor, x: 0, y: 0, color: "text-indigo-400", type: "app" },
-    { id: "public", title: "Public", icon: Users, x: 1, y: 0, color: "text-pink-400", type: "folder" },
+    { id: "weather", title: "Weather", icon: Cloud, x: 1, y: 0, color: "text-sky-400", type: "app" },
     { id: "terminal", title: "Terminal", icon: Terminal, x: 0, y: 1, color: "text-green-400", type: "app" },
     { id: "aboutMe", title: "About Me", icon: Info, x: 1, y: 1, color: "text-cyan-400", type: "file" },
     { id: "calculator", title: "Calculator", icon: Calculator, x: 0, y: 2, color: "text-yellow-400", type: "app" },
     { id: "textEditor", title: "Text Editor", icon: FileEdit, x: 1, y: 2, color: "text-orange-400", type: "app" },
-    { id: "imageViewer", title: "Images", icon: Image, x: 0, y: 3, color: "text-purple-400", type: "app" },
-    { id: "notepad", title: "Notepad", icon: FileText, x: 1, y: 3, color: "text-blue-400", type: "app" },
+    { id: "memory", title: "Memory Game", icon: Layout, x: 0, y: 3, color: "text-purple-400", type: "app" },
+    { id: "readme", title: "README", icon: FileQuestion, x: 1, y: 3, color: "text-blue-400", type: "app" },
+    { id: "calendar", title: "Calendar", icon: CalendarIcon, x: 0, y: 4, color: "text-rose-400", type: "app" },
   ]);
 
   const [editingIcon, setEditingIcon] = useState<string | null>(null);
@@ -63,31 +68,79 @@ export default function Desktop() {
       return;
     }
 
-    const width = icon.id === 'textEditor' ? 800 : 600;
-    const height = icon.id === 'textEditor' ? 600 : 400;
+    let width = 600;
+    let height = 400;
+
+    // Set specific dimensions for certain apps
+    switch (icon.id) {
+      case 'textEditor':
+        width = 800;
+        height = 600;
+        break;
+      case 'calculator':
+        width = 300;
+        height = 450;
+        break;
+      case 'memory':
+        width = 450;
+        height = 600;
+        break;
+      case 'weather':
+        width = 400;
+        height = 500;
+        break;
+      case 'calendar':
+        width = 400;
+        height = 500;
+        break;
+    }
+
     const position = getRandomWindowPosition(width, height);
 
-    const aboutMeContent = <AboutMeContent />;
     let content: WindowContent;
 
     switch (icon.id) {
       case 'myPC':
         content = {
           type: 'file-explorer',
-          icons: icons.filter(i => i.id !== 'myPC'), // Exclude My PC from its own window
-          aboutMeContent
+          icons: icons.filter(i => i.id !== 'myPC'),
+          aboutMeContent: <AboutMeContent />
         };
         break;
       case 'aboutMe':
         content = {
           type: 'about',
-          content: aboutMeContent
+          content: <AboutMeContent />
         };
         break;
       case 'calculator':
         content = {
           type: 'default',
           content: <CalculatorApp />
+        };
+        break;
+      case 'memory':
+        content = {
+          type: 'default',
+          content: <MemoryGame />
+        };
+        break;
+      case 'weather':
+        content = {
+          type: 'default',
+          content: <WeatherApp />
+        };
+        break;
+      case 'readme':
+        content = {
+          type: 'default',
+          content: <ReadmeContent />
+        };
+        break;
+      case 'calendar':
+        content = {
+          type: 'default',
+          content: <Calendar />
         };
         break;
       case 'textEditor':
@@ -108,21 +161,18 @@ export default function Desktop() {
           )
         };
         break;
-      case 'imageViewer':
-        content = {
-          type: 'default',
-          content: (
-            <div className="p-4">
-              <p>Image Viewer not implemented yet.</p>
-            </div>
-          )
-        };
-        break;
       default:
-        content = {
-          type: 'default',
-          content: `Content for ${icon.title}`
-        };
+        if (icon.type === 'file') {
+          content = {
+            type: 'text-editor',
+            id: icon.id
+          };
+        } else {
+          content = {
+            type: 'default',
+            content: `Content for ${icon.title}`
+          };
+        }
     }
 
     openWindow({
@@ -130,8 +180,8 @@ export default function Desktop() {
       title: icon.title,
       content,
       ...position,
-      width: icon.id === 'calculator' ? 300 : width,
-      height: icon.id === 'calculator' ? 450 : height,
+      width,
+      height,
     });
   }, [openWindow, isWindowOpen, focusWindow, icons, getRandomWindowPosition]);
 
@@ -146,7 +196,7 @@ export default function Desktop() {
     const newIcon = {
       id: newId,
       title: "New Text File",
-      icon: FileText,
+      icon: FileEdit,
       x: position.x,
       y: position.y,
       color: generateRandomColor(),
@@ -163,7 +213,7 @@ export default function Desktop() {
     setIcons(prev => [...prev, {
       id: newId,
       title: "New Folder",
-      icon: Folder,
+      icon: FileEdit,
       x: position.x,
       y: position.y,
       color: "text-neutral-400",
