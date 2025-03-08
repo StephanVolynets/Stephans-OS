@@ -5,9 +5,9 @@ export function AboutMeContent() {
     <div className="prose dark:prose-invert max-w-none">
       <h1>About Me</h1>
       <p>
-        Welcome to my digital workspace! I'm passionate about technology and creating 
-        intuitive user experiences. This desktop environment is a showcase of my 
-        skills in web development and UI design.
+        Welcome to my digital workspace! My names Stephan! I'm passionate about technology and creating 
+        intuitive user experiences. This "desktop environment" is passion project and a showcase of my 
+        skills in web development and UI design. 
       </p>
       <h2>Skills</h2>
       <ul>
@@ -19,9 +19,8 @@ export function AboutMeContent() {
       <br>
       </br>
       <p>
-        This desktop environment is one of my projects, demonstrating modern web 
-        technologies and interactive user interfaces. Feel free to explore the 
-        various windows and features!
+        Feel free to explore the 
+        various windows and features! T
       </p>
     </div>
   );
