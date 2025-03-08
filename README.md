@@ -87,7 +87,7 @@
 
    
 
-### Current Progress
+### Current Core Progress
 
   Implemented core desktop UI and basic applications.
   Developed a dynamic window management system.
@@ -104,8 +104,7 @@
   **Bash Terminal Emulation**  
    Adding a functional shell for executing basic commands and file manipulation tasks.
 
-  **ZenFS Integration** (Research Ongoing)  
-   Potential use of ZenFS to enhance file system operations.
+  **Binary Viewer**
 
    
 
