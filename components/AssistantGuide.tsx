@@ -99,8 +99,7 @@ export function AssistantGuide() {
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 10 }}
-              className="relative bg-background/80 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-border cursor-pointer"
-              onClick={handleNextTip}
+              className="relative bg-background/80 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-border"
               style={{ 
                 maxWidth: "240px",
                 transform: "translateX(40px)"
@@ -128,10 +127,7 @@ export function AssistantGuide() {
                   variant="ghost"
                   size="icon"
                   className="h-6 w-6 rounded-full hover:bg-background/50"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePrevTip();
-                  }}
+                  onClick={handlePrevTip}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -142,10 +138,7 @@ export function AssistantGuide() {
                   variant="ghost"
                   size="icon"
                   className="h-6 w-6 rounded-full hover:bg-background/50"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNextTip();
-                  }}
+                  onClick={handleNextTip}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
