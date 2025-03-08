@@ -10,7 +10,7 @@
 - [Dustin Brett’s daedalOS](https://dustinbrett.com/) - A web-based desktop experience that inspired this project.
 
 <h1 align="center">Snapshot</h1>
-![Xnip2025-03-07_23-19-34](https://github.com/user-attachments/assets/32ac7c35-b570-4d08-ba1c-d1d3338664e1)
+
 
 <p>
    <img src="https://github.com/user-attachments/assets/32ac7c35-b570-4d08-ba1c-d1d3338664e1" alt="Desktop Browser" style="width:100% height="700">
