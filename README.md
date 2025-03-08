@@ -6,8 +6,8 @@
 
 ## Resources & Inspirations
 
-- [Linuxontheweb](https://linuxontheweb.github.io/) - A web-based Linux environment. Learn more about it [here](https://linuxontheweb.github.io/www/docs/what-it-is.html).
 - [Dustin Brett’s daedalOS](https://dustinbrett.com/) - A web-based desktop experience that inspired this project.
+- [Linuxontheweb](https://linuxontheweb.github.io/) - A web-based Linux environment. Learn more about it [here](https://linuxontheweb.github.io/www/docs/what-it-is.html).
 
 <h1 align="center">Snapshot</h1>
 
