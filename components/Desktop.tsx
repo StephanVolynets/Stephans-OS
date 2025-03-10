@@ -11,7 +11,8 @@ import {
   FileQuestion,
   Layout,
   Cloud,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  HardDrive
 } from "lucide-react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ import { ReadmeContent } from "./ReadmeContent";
 import { MemoryGame } from "./MemoryGame";
 import { WeatherApp } from "./WeatherApp";
 import { Calendar } from "./Calender";
+import { FileSystemExplorer } from "./FileSystemExplorer";
 
 export default function Desktop() {
   const { windows, openWindow, isWindowOpen, focusWindow } = useWindows();
@@ -43,6 +45,7 @@ export default function Desktop() {
     { id: "memory", title: "Memory Game", icon: Layout, x: 0, y: 3, color: "text-purple-400", type: "app" },
     { id: "readme", title: "README", icon: FileQuestion, x: 1, y: 3, color: "text-blue-400", type: "app" },
     { id: "calendar", title: "Calendar", icon: CalendarIcon, x: 0, y: 4, color: "text-rose-400", type: "app" },
+    { id: "fileSystem", title: "Files", icon: HardDrive, x: 1, y: 4, color: "text-emerald-400", type: "app" },
   ]);
 
   const [editingIcon, setEditingIcon] = useState<string | null>(null);
@@ -164,6 +167,14 @@ export default function Desktop() {
             </div>
           )
         };
+        break;
+      case 'fileSystem':
+        content = {
+          type: 'default' as const,
+          content: <FileSystemExplorer />
+        };
+        width = 800;
+        height = 600;
         break;
       default:
         if (icon.type === 'file') {
