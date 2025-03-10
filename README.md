@@ -8,6 +8,7 @@
 
 - [Dustin Brett’s daedalOS](https://dustinbrett.com/) - A web-based desktop experience that inspired this project.
 - [Linuxontheweb](https://linuxontheweb.github.io/) - A web-based Linux environment. Learn more about it [here](https://linuxontheweb.github.io/www/docs/what-it-is.html).
+- File System unctionality uses the Origin Private File System (OPFS) API, read more [here](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system).
 
 <h1 align="center">Snapshot</h1>
 
