@@ -11,12 +11,19 @@ import { cn } from "@/lib/utils";
 import { fileSystem, FileSystemItem } from "@/lib/fileSystem";
 import { useWindows } from "@/contexts/WindowsContext";
 import { TextEditor } from "@/components/TextEditor";
+import { MyPCView } from "@/components/MyPCView";
 
 interface FileSystemExplorerProps {
+  folderId?: string;
+  title?: string;
   initialPath?: string[];
 }
 
-export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps) {
+export const FileSystemExplorer: React.FC<FileSystemExplorerProps> = ({ 
+  folderId, 
+  title = 'File Explorer', 
+  initialPath = [] 
+}) => {
   const { openWindow, focusWindow, isWindowOpen } = useWindows();
   const [currentPath, setCurrentPath] = useState<string[]>(initialPath);
   const [items, setItems] = useState<FileSystemItem[]>([]);
@@ -26,6 +33,7 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
   const [isCreateFileOpen, setIsCreateFileOpen] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   const [isInitialized, setIsInitialized] = useState(false);
+  const [currentView, setCurrentView] = useState<'mypc' | 'fileExplorer'>('fileExplorer');
 
   // Initialize file system and load directory contents
   const loadDirectory = useCallback(async (path: string[] = currentPath) => {
@@ -92,8 +100,7 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
     try {
       const fileData = await fileSystem.readFile(
         item.path.slice(0, -1), 
-        item.path[item.path.length - 1],
-        true
+        item.path[item.path.length - 1]
       );
       
       if (!fileData) {
@@ -101,44 +108,32 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
         return;
       }
       
+      const fileName = item.path[item.path.length - 1];
       const fileId = `file-${item.path.join("-")}`;
+      const filePath = item.path.slice(0, -1);
       
       if (isWindowOpen(fileId)) {
         focusWindow(fileId);
         return;
       }
-      
-      // Get file extension
-      const fileName = item.path[item.path.length - 1];
-      const fileExtension = fileName.includes(".") 
-        ? fileName.split(".").pop()?.toLowerCase() 
-        : null;
-      
-      const content = {
-        type: 'default' as const,
-        content: (
-          <div className="p-4 w-full h-full flex flex-col">
-            <div className="flex items-center mb-2">
-              <File className="mr-2 h-5 w-5" />
-              <span className="font-medium">{fileName}</span>
-            </div>
-            <ScrollArea className="flex-1 bg-background border rounded-md p-2">
-              <pre className="font-mono text-sm whitespace-pre-wrap">
-                {fileData.content as string}
-              </pre>
-            </ScrollArea>
-            <div className="mt-2 text-xs text-muted-foreground">
-              {item.size && `Size: ${formatFileSize(item.size)} · `}
-              {item.lastModified && `Last modified: ${new Date(item.lastModified).toLocaleString()}`}
-            </div>
-          </div>
-        )
-      };
-      
+
+      // Convert ArrayBuffer to string if needed
+      const content = typeof fileData.content === 'string' 
+        ? fileData.content 
+        : new TextDecoder().decode(fileData.content as ArrayBuffer);
+
       openWindow({
         id: fileId,
-        title: item.path[item.path.length - 1],
-        content,
+        title: fileName,
+        content: {
+          type: 'default',
+          content: <TextEditor 
+            fileId={fileId} 
+            initialContent={content}
+            path={filePath}
+            fileName={fileName}
+          />
+        },
         width: 700,
         height: 500,
       });
@@ -181,14 +176,36 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
       return;
     }
     
+    // Add .txt extension if not specified
+    let fileName = newItemName.trim();
+    if (!fileName.includes('.')) {
+      fileName += '.txt';
+    }
+    
     setIsLoading(true);
     try {
-      const success = await fileSystem.createFile(currentPath, newItemName.trim(), "", "text/plain");
+      // Create empty text file
+      const success = await fileSystem.createFile(currentPath, fileName, "");
       if (success) {
-        toast.success(`File "${newItemName}" created`);
+        toast.success(`File "${fileName}" created`);
         setNewItemName("");
         setIsCreateFileOpen(false);
+        
+        // Refresh directory listing
         loadDirectory();
+        
+        // Optionally, immediately open the file for editing
+        const fileId = `file-${[...currentPath, fileName].join("-")}`;
+        openWindow({
+          id: fileId,
+          title: fileName,
+          content: {
+            type: 'default',
+            content: <TextEditor fileId={fileId} path={currentPath} fileName={fileName} />
+          },
+          width: 700,
+          height: 500,
+        });
       }
     } catch (error) {
       console.error("Error creating file:", error);
@@ -270,6 +287,19 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
     );
   };
 
+  const handleNavigate = useCallback((item: FileSystemItem) => {
+    if (item.name === 'My PC') {
+      // Show My PC view
+      setCurrentView('mypc');
+    } else if (item.kind === 'directory') {
+      // Navigate into directory
+      navigateInto(item);
+    } else {
+      // Open file
+      openFile(item);
+    }
+  }, [navigateInto, openFile]);
+
   return (
     <div className="h-full flex flex-col p-4">
       <div className="flex justify-between items-center mb-4">
@@ -332,6 +362,8 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
           <div className="flex items-center justify-center h-full">
             <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
+        ) : currentView === 'mypc' ? (
+          <MyPCView />
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Folder className="h-16 w-16 mb-2" />
@@ -347,13 +379,7 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
                   selectedItem?.path.join("/") === item.path.join("/") && "bg-accent"
                 )}
                 onClick={() => setSelectedItem(item)}
-                onDoubleClick={() => {
-                  if (item.kind === "directory") {
-                    navigateInto(item);
-                  } else {
-                    openFile(item);
-                  }
-                }}
+                onDoubleClick={() => handleNavigate(item)}
               >
                 {item.kind === "directory" ? (
                   <Folder className="h-10 w-10 text-blue-500" />
@@ -427,4 +453,4 @@ export function FileSystemExplorer({ initialPath = [] }: FileSystemExplorerProps
       </Dialog>
     </div>
   );
-} 
+}; 

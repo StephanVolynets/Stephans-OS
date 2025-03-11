@@ -125,7 +125,7 @@ export function FileSystemControls({
     try {
       if (selectedItem && selectedItem.kind === "file") {
         // Update existing file
-        const success = await fileSystem.updateFile(
+        const success = await fileSystem.writeFile(
           selectedItem.path.slice(0, -1),
           selectedItem.name,
           fileContent
@@ -138,7 +138,7 @@ export function FileSystemControls({
       } else {
         // Create new file
         const fileNameWithExt = fileName.includes(".") ? fileName : `${fileName}.txt`;
-        const success = await fileSystem.createFile(
+        const success = await fileSystem.writeFile(
           currentPath,
           fileNameWithExt,
           fileContent

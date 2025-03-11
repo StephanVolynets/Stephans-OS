@@ -9,11 +9,17 @@ export interface AppIcon {
   y: number;
   color: string;
   type: 'app' | 'file' | 'folder';
+  isSystemApp?: boolean;
 }
 
 export type WindowContent = 
   | { type: 'text-editor'; id: string }
-  | { type: 'file-explorer'; icons: AppIcon[]; aboutMeContent: React.ReactNode }
+  | { 
+      type: 'file-explorer'; 
+      icons?: AppIcon[]; 
+      aboutMeContent?: React.ReactNode;
+      folderId?: string;
+    }
   | { type: 'about'; content: React.ReactNode }
   | { type: 'default'; content: React.ReactNode };
 

@@ -9,16 +9,18 @@
  * to the web app's origin, making it suitable for app-specific file storage.
  */
 
+"use client";
+
 import { toast } from "sonner";
 // TypeScript will automatically pick up .d.ts files - no need to import them explicitly
 // import "../types/file-system";
 
 export interface FileSystemItem {
   name: string;
-  kind: 'file' | 'directory';
-  path: string[];
-  lastModified?: number;
+  kind: "file" | "directory";
   size?: number;
+  lastModified?: number;
+  path: string[];
 }
 
 export interface FileData {
@@ -26,221 +28,212 @@ export interface FileData {
   type: string;
 }
 
-class FileSystemService {
-  private rootDirectory: FileSystemDirectoryHandle | null = null;
-  
-  /**
-   * Initialize the OPFS access
-   */
+class FileSystemAPI {
+  private rootDirHandle: FileSystemDirectoryHandle | null = null;
+  private initialized = false;
+
+  // Check if File System Access API is supported
+  isSupported(): boolean {
+    return 'showDirectoryPicker' in window && 'showOpenFilePicker' in window;
+  }
+
+  // Initialize the file system
   async init(): Promise<boolean> {
+    if (this.initialized) return true;
+    
     try {
-      if (typeof window === 'undefined' || 
-          !('storage' in navigator && 'getDirectory' in navigator.storage)) {
-        toast.error('File System API is not supported in your browser');
-        return false;
-      }
-      
-      this.rootDirectory = await navigator.storage.getDirectory();
+      // Get OPFS root
+      this.rootDirHandle = await navigator.storage.getDirectory();
+      this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Failed to initialize the file system:', error);
-      toast.error('Failed to access file system');
+      console.error("Failed to initialize file system:", error);
       return false;
     }
   }
 
-  /**
-   * List all files and directories in a specified path
-   */
+  // List directory contents
   async listDirectory(path: string[] = []): Promise<FileSystemItem[]> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      // Navigate to the target directory
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: false });
+        currentDir = await currentDir.getDirectoryHandle(segment);
       }
       
       const entries: FileSystemItem[] = [];
-      for await (const [name, handle] of targetDir.entries()) {
-        const kind = handle.kind;
-        const item: FileSystemItem = {
+      
+      // Get all entries in the directory
+      for await (const [name, handle] of currentDir.entries()) {
+        const entry: FileSystemItem = {
           name,
-          kind,
+          kind: handle.kind,
           path: [...path, name],
         };
         
-        if (kind === 'file') {
-          const file = await (handle as FileSystemFileHandle).getFile();
-          item.lastModified = file.lastModified;
-          item.size = file.size;
+        if (handle.kind === "file") {
+          const fileHandle = handle as FileSystemFileHandle;
+          const file = await fileHandle.getFile();
+          entry.size = file.size;
+          entry.lastModified = file.lastModified;
         }
         
-        entries.push(item);
+        entries.push(entry);
       }
       
-      // Sort: directories first, then files alphabetically
+      // Sort: directories first, then files, both alphabetically
       return entries.sort((a, b) => {
         if (a.kind !== b.kind) {
-          return a.kind === 'directory' ? -1 : 1;
+          return a.kind === "directory" ? -1 : 1;
         }
         return a.name.localeCompare(b.name);
       });
     } catch (error) {
-      console.error('Failed to list directory:', error);
-      toast.error(`Failed to list directory: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error listing directory:", error);
       return [];
     }
   }
 
-  /**
-   * Create a new directory at the specified path
-   */
+  // Create a directory
   async createDirectory(path: string[], name: string): Promise<boolean> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: true });
+        currentDir = await currentDir.getDirectoryHandle(segment, { create: true });
       }
       
-      await targetDir.getDirectoryHandle(name, { create: true });
+      // Create the new directory
+      await currentDir.getDirectoryHandle(name, { create: true });
       return true;
     } catch (error) {
-      console.error('Failed to create directory:', error);
-      toast.error(`Failed to create directory: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error creating directory:", error);
       return false;
     }
   }
 
-  /**
-   * Create a new file at the specified path
-   */
-  async createFile(path: string[], name: string, data: string | ArrayBuffer = '', type: string = 'text/plain'): Promise<boolean> {
+  // Create a file
+  async createFile(
+    path: string[], 
+    name: string, 
+    content: string | ArrayBuffer = ""
+  ): Promise<boolean> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: true });
+        currentDir = await currentDir.getDirectoryHandle(segment, { create: true });
       }
       
-      const fileHandle = await targetDir.getFileHandle(name, { create: true });
+      // Create the file
+      const fileHandle = await currentDir.getFileHandle(name, { create: true });
+      
+      // Write content to the file
       const writable = await fileHandle.createWritable();
-      
-      await writable.write(data);
+      await writable.write(content);
       await writable.close();
+      
       return true;
     } catch (error) {
-      console.error('Failed to create file:', error);
-      toast.error(`Failed to create file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error creating file:", error);
       return false;
     }
   }
 
-  /**
-   * Read a file from the specified path
-   */
-  async readFile(path: string[], name: string, asText: boolean = true): Promise<FileData | null> {
+  // Read a file
+  async readFile(
+    path: string[], 
+    name: string, 
+    asText: boolean = true
+  ): Promise<FileData | null> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: false });
+        currentDir = await currentDir.getDirectoryHandle(segment);
       }
       
-      const fileHandle = await targetDir.getFileHandle(name, { create: false });
+      // Get the file
+      const fileHandle = await currentDir.getFileHandle(name);
       const file = await fileHandle.getFile();
       
+      let content: string | ArrayBuffer;
       if (asText) {
-        const content = await file.text();
-        return { content, type: file.type };
+        content = await file.text();
       } else {
-        const content = await file.arrayBuffer();
-        return { content, type: file.type };
+        content = await file.arrayBuffer();
       }
+      
+      return {
+        content,
+        type: file.type
+      };
     } catch (error) {
-      console.error('Failed to read file:', error);
-      toast.error(`Failed to read file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error reading file:", error);
       return null;
     }
   }
 
-  /**
-   * Update an existing file
-   */
-  async updateFile(path: string[], name: string, data: string | ArrayBuffer): Promise<boolean> {
+  // Write to a file
+  async writeFile(
+    path: string[], 
+    name: string, 
+    content: string | ArrayBuffer
+  ): Promise<boolean> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: false });
+        currentDir = await currentDir.getDirectoryHandle(segment, { create: true });
       }
       
-      const fileHandle = await targetDir.getFileHandle(name, { create: false });
-      const writable = await fileHandle.createWritable({ keepExistingData: false });
+      // Get or create the file
+      const fileHandle = await currentDir.getFileHandle(name, { create: true });
       
-      await writable.write(data);
+      // Write content to the file
+      const writable = await fileHandle.createWritable();
+      await writable.write(content);
       await writable.close();
+      
       return true;
     } catch (error) {
-      console.error('Failed to update file:', error);
-      toast.error(`Failed to update file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error writing file:", error);
       return false;
     }
   }
 
-  /**
-   * Delete a file or directory
-   */
+  // Delete a file or directory
   async delete(path: string[], name: string): Promise<boolean> {
+    if (!this.rootDirHandle) await this.init();
+    
     try {
-      if (!this.rootDirectory) {
-        await this.init();
-        if (!this.rootDirectory) {
-          throw new Error('File system not initialized');
-        }
-      }
+      let currentDir = this.rootDirHandle!;
       
-      let targetDir = this.rootDirectory;
+      // Navigate to the specified path
       for (const segment of path) {
-        targetDir = await targetDir.getDirectoryHandle(segment, { create: false });
+        currentDir = await currentDir.getDirectoryHandle(segment);
       }
       
-      await targetDir.removeEntry(name, { recursive: true });
+      // Delete the entry
+      await currentDir.removeEntry(name, { recursive: true });
       return true;
     } catch (error) {
-      console.error('Failed to delete item:', error);
-      toast.error(`Failed to delete item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error deleting entry:", error);
       return false;
     }
   }
@@ -264,17 +257,51 @@ class FileSystemService {
     }
   }
 
-  /**
-   * Check if the file system is available
-   */
-  isSupported(): boolean {
-    return !!(
-      typeof window !== 'undefined' && 
-      'storage' in navigator && 
-      'getDirectory' in navigator.storage
-    );
+  // Add this method to your FileSystem class
+  async saveConfig(config: any): Promise<boolean> {
+    try {
+      // Read existing config first
+      const existingConfig = await this.loadConfig() || {};
+      
+      // Deep merge the configs
+      const newConfig = {
+        ...existingConfig,
+        ...config,
+        lastModified: Date.now(),
+        // Ensure icons array is completely replaced rather than merged
+        icons: config.icons || existingConfig.icons
+      };
+      
+      // Convert to string with pretty printing
+      const configString = JSON.stringify(newConfig, null, 2);
+      
+      // Save to file system
+      await this.writeFile([], 'system-config.json', configString);
+      return true;
+    } catch (error) {
+      console.error('Error saving config:', error);
+      return false;
+    }
+  }
+
+  // Add this method to load config
+  async loadConfig(): Promise<any> {
+    try {
+      const configData = await this.readFile([], 'system-config.json');
+      if (configData?.content) {
+        const contentString = typeof configData.content === 'string' 
+          ? configData.content 
+          : new TextDecoder().decode(configData.content as ArrayBuffer);
+        
+        return JSON.parse(contentString);
+      }
+      return null;
+    } catch (error) {
+      console.error('Error loading config:', error);
+      return null;
+    }
   }
 }
 
 // Export a singleton instance
-export const fileSystem = new FileSystemService(); 
+export const fileSystem = new FileSystemAPI(); 

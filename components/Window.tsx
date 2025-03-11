@@ -80,15 +80,13 @@ function ResizeHandle({ direction, onResizeStart }: ResizeHandleProps) {
 function renderWindowContent(content: WindowContent) {
   switch (content.type) {
     case 'text-editor':
-      return <TextEditor id={content.id} />;
+      return <TextEditor initialContent="" fileId={content.id} />;
     case 'file-explorer':
       return (
-        <FileExplorer
-          icons={content.icons}
-          aboutMeContent={<AboutMeContent />}
-        />
+        <FileExplorer />
       );
     case 'about':
+      return <AboutMeContent />;
     case 'default':
       return content.content;
   }
