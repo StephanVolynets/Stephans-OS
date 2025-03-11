@@ -8,8 +8,8 @@ import { useWindowDrag } from "@/hooks/useWindowDrag";
 import { TextEditor } from "./TextEditor";
 import { FileExplorer } from "./FileExplorer";
 import { AboutMeContent } from "./AboutMeContent";
+import { SystemDashboard } from "./SystemDashboard";
 import type { Window as WindowType, WindowContent } from "@/types/global";
-
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 200;
@@ -77,7 +77,7 @@ function ResizeHandle({ direction, onResizeStart }: ResizeHandleProps) {
   );
 }
 
-function renderWindowContent(content: WindowContent) {
+function renderWindowContent(content: WindowContent, id: string) {
   switch (content.type) {
     case 'text-editor':
       return <TextEditor initialContent="" fileId={content.id} />;
@@ -88,6 +88,9 @@ function renderWindowContent(content: WindowContent) {
     case 'about':
       return <AboutMeContent />;
     case 'default':
+      if (id === 'myPC') {
+        return <SystemDashboard />;
+      }
       return content.content;
   }
 }
@@ -167,7 +170,7 @@ export default function Window(props: WindowType) {
       />
 
       <div className="p-4 overflow-auto" style={{ height: `calc(100% - 32px)` }}>
-        {renderWindowContent(props.content)}
+        {renderWindowContent(props.content, props.id)}
       </div>
 
       {!state.isMaximized && (
