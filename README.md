@@ -14,13 +14,12 @@
 
 
 <p>
-   <img src="https://github.com/user-attachments/assets/32ac7c35-b570-4d08-ba1c-d1d3338664e1" alt="Desktop Browser" style="width:100% height="700">
+   <img src="https://github.com/user-attachments/assets/cf5d2120-38fb-429c-8e93-71347a8b4387" alt="Desktop Browser" style="width:100% height="700">
         <br>
 
 </p>
 
  
-   
 
 ## Technologies Used
 
