@@ -9,6 +9,8 @@ import { TextEditor } from "./TextEditor";
 import { FileExplorer } from "./FileExplorer";
 import { AboutMeContent } from "./AboutMeContent";
 import { SystemDashboard } from "./SystemDashboard";
+import { Browser } from "./Browser";
+import { CodeIndexer } from "./CodeIndexer";
 import type { Window as WindowType, WindowContent } from "@/types/global";
 
 const MIN_WIDTH = 200;
@@ -87,6 +89,10 @@ function renderWindowContent(content: WindowContent, id: string) {
       );
     case 'about':
       return <AboutMeContent />;
+    case 'browser':
+      return <Browser id={id} />;
+    case 'code-indexer':
+      return <CodeIndexer />;
     case 'default':
       if (id === 'myPC') {
         return <SystemDashboard />;

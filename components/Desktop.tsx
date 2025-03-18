@@ -14,7 +14,9 @@ import {
   Cloud,
   Calendar as CalendarIcon,
   HardDrive,
-  Folder
+  Folder,
+  Globe,
+  Code
 } from "lucide-react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -47,6 +49,8 @@ const DEFAULT_ICONS: AppIcon[] = [
   { id: "readme", title: "README", icon: FileQuestion, x: 1, y: 3, color: "text-blue-400", type: "app" },
   { id: "calendar", title: "Calendar", icon: CalendarIcon, x: 0, y: 4, color: "text-rose-400", type: "app" },
   { id: "fileSystem", title: "Files", icon: HardDrive, x: 1, y: 4, color: "text-emerald-400", type: "app" },
+  { id: "browser", title: "Browser", icon: Globe, x: 0, y: 5, color: "text-blue-500", type: "app" },
+  { id: "codeIndexer", title: "Code Indexer", icon: Code, x: 1, y: 5, color: "text-violet-400", type: "app" },
 ];
 
 const LOCAL_STORAGE_KEY = 'desktop-icons-v2';
@@ -202,6 +206,14 @@ export default function Desktop() {
         width = 800;
         height = 600;
         break;
+      case 'browser':
+        width = 1200;
+        height = 800;
+        break;
+      case 'codeIndexer':
+        width = 1000;
+        height = 700;
+        break;
     }
 
     const position = getRandomWindowPosition(width, height);
@@ -250,6 +262,16 @@ export default function Desktop() {
         content = {
           type: 'default',
           content: <Calendar />
+        };
+        break;
+      case 'browser':
+        content = {
+          type: 'browser'
+        };
+        break;
+      case 'codeIndexer':
+        content = {
+          type: 'code-indexer'
         };
         break;
       case 'textEditor':

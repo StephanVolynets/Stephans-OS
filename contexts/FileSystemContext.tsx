@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { generateRandomColor } from '@/lib/utils';
 import type { AppIcon } from '@/types/global';
-import { FileEdit, Folder, Monitor, Cloud, Terminal, Info, Calculator, Layout, FileQuestion, CalendarIcon, HardDrive } from 'lucide-react';
+import { FileEdit, Folder, Monitor, Cloud, Terminal, Info, Calculator, Layout, FileQuestion, CalendarIcon, HardDrive, Globe, Code } from 'lucide-react';
 import { fileSystem } from '@/lib/fileSystem';
 
 // File system types that will be used throughout the application
@@ -113,6 +113,8 @@ export const FileSystemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       { id: "readme", title: "README", icon: FileQuestion, x: 1, y: 3, color: "text-blue-400", type: "app", isSystemApp: true },
       { id: "calendar", title: "Calendar", icon: CalendarIcon, x: 0, y: 4, color: "text-rose-400", type: "app", isSystemApp: true },
       { id: "fileSystem", title: "Files", icon: HardDrive, x: 1, y: 4, color: "text-emerald-400", type: "app", isSystemApp: true },
+      { id: "browser", title: "Browser", icon: Globe, x: 0, y: 5, color: "text-blue-500", type: "app", isSystemApp: true },
+      { id: "codeIndexer", title: "Code Indexer", icon: Code, x: 1, y: 5, color: "text-violet-400", type: "app", isSystemApp: true },
     ];
     setSystemApps(defaultSystemApps);
   }, []);
@@ -329,7 +331,7 @@ export const FileSystemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, []);
 
   // File operations
-  const createFile = useCallback(async (name: string, parentId: string | null = null): Promise<FileSystemItem> => {
+  const createFile = useCallback(async (name: string, parentId?: string | null): Promise<FileSystemItem> => {
     if (!name.trim()) throw new Error('File name cannot be empty');
     
     const newFile: FileSystemItem = {
@@ -374,7 +376,7 @@ export const FileSystemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return newFile;
   }, [files, rootDirectoryHandle]);
 
-  const createFolder = useCallback(async (name: string, parentId: string | null = null): Promise<FileSystemItem> => {
+  const createFolder = useCallback(async (name: string, parentId?: string | null): Promise<FileSystemItem> => {
     if (!name.trim()) throw new Error('Folder name cannot be empty');
     
     const newFolder: FileSystemItem = {

@@ -21,6 +21,8 @@ export type WindowContent =
       folderId?: string;
     }
   | { type: 'about'; content: React.ReactNode }
+  | { type: 'browser'; }
+  | { type: 'code-indexer'; }
   | { type: 'default'; content: React.ReactNode };
 
 export interface Window {

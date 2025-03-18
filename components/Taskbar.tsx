@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import StartMenu from "./StartMenu";
 import { TaskbarClock } from "./TaskbarClock";
+import { WidgetsContainer } from "./widgets/WidgetsContainer";
 import { cn } from "@/lib/utils";
 
 export default function Taskbar() {
@@ -57,7 +58,10 @@ export default function Taskbar() {
         </div>
       </div>
 
-      <TaskbarClock />
+      <div className="flex items-center h-full">
+        <WidgetsContainer />
+        <TaskbarClock />
+      </div>
 
       {showStartMenu && <StartMenu onClose={() => setShowStartMenu(false)} />}
     </div>
