@@ -32,12 +32,13 @@
  ° **TINYmce**: A WYSIWYG text editor for file editing.
  
  ° **React Calendar**: Calendar interface with event management capabilities.
+ 
+ ° **OPFS**: Storage endpoint provided as part of the File System API, which is private to the origin of the page and not visible to the user like the regular file system.
   
- ° **IndexedDB (Planned)**: Persistent client side storage for the file system.
-  
+ ° **IndexedDB**
 
+---
    
-
 ## Project Features and Logic
 
 ### User Interface Components
@@ -55,28 +56,28 @@
      Browse and manage files within a virtual directory system.
      Supports drag and drop, icon rearrangement, and future indexed storage.
    
-2. **Code Indever**
-     Index and Search Functionality for all files cached.****
+2. **Code Indexer**
+     Index and Search Functionality for all files cached.
 
-3. **Text Editor**  
+4. **Text Editor**  
      Feature rich editor with options for formatting and file saving.
    
-4. **Web Browser**  
+5. **Web Browser**  
      Built in browser for accessing web pages (expandable).
 
-5. **Calendar (with event planner)**  
+6. **Calendar (with event planner)**  
      Intuitive date and event tracking interface.
    
-6. **Weather App**
+7. **Weather App**
      Precise real time weather data from any city in the world
 
-7. **Terminal (Planned)**  
+8. **Terminal (Planned)**  
      Bash like shell interface to execute command line tasks.
 
-8. **Memory Game**
+9. **Memory Game**
    Find matching pairs of emojis in the fewest moves possible, keeps track of best score.
    
-9. **Calculator**
+10. **Calculator**
 
    
 
