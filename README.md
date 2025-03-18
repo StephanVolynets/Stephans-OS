@@ -35,7 +35,7 @@
 
 ### User Interface Components
 
-- **Desktop Grid**: Users can select and drag icons using an optimized grid system with click detection and dynamic styling.
+- **Desktop Grid**: Users can select and drag icons using an optimized grid system with click detection, dynamic styling, and location persistance through sessions. 
 - **Taskbar**: Displays active windows, offering quick access to applications.
 - **Start Menu**: Application launcher providing easy access to built in programs and system settings.
 - **Context Menus**: Right click context menus dynamically adapt to desktop or icon interactions, mimicking operating system behavior.
