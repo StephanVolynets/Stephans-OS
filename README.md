@@ -2,6 +2,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ab3bb5b6-b35e-4b94-976b-b5f3f4a99ed2/deploy-status)](https://app.netlify.com/sites/stephos/deploys)
 
+**Currently**: _Debugging Deployment Bugs_
+
 ## Overview
 
 **Stephan's OS** is an interactive, web based desktop operating system environment built as a portfolio project. Inspired by Dustin Brett’s **daedalOS** and other innovative projects, it showcases a wide range of web technologies and functionalities. The project aims to provide a seamless and immersive OS experience directly in the browser, supporting various applications and widgets with persistent client side storage capabilities.
